@@ -1,69 +1,82 @@
 <aside class="sidebar">
-
-  <a class="brand" routerLink="/overview">
+  <a class="brand" routerLink="/discover">
     <span class="brand-icon">🌱</span>
     <span>FoodSaver</span>
     <small>STORE</small>
   </a>
 
-  <div class="nav-label">MANAGEMENT</div>
+  @if (isAdmin()) {
+    <div class="nav-label">MANAGEMENT</div>
 
-  <nav class="nav-links">
-    <a routerLink="/overview" routerLinkActive="active">
-      <span>▦</span> Overview
-    </a>
-
-    <a routerLink="/inventory" routerLinkActive="active">
-      <span>▤</span> Inventory
-    </a>
-
-    <a routerLink="/rules" routerLinkActive="active">
-      <span>☷</span> Rules
-    </a>
-  </nav>
+    <nav class="nav-links">
+      <a routerLink="/overview" routerLinkActive="active">
+        <span>▦</span> Dashboard
+      </a>
+      <a routerLink="/inventory" routerLinkActive="active">
+        <span>▤</span> Inventory
+      </a>
+      <a routerLink="/rules" routerLinkActive="active">
+        <span>☷</span> Rules
+      </a>
+    </nav>
+  }
 
   <div class="nav-label shopping-label">SHOPPING</div>
-
   <nav class="nav-links">
     <a routerLink="/discover" routerLinkActive="active">
       <span>⌕</span> Discover
     </a>
-
-    <a routerLink="/saved" routerLinkActive="active">
-      <span>♡</span> Saved
+    <a routerLink="/offers" routerLinkActive="active">
+      <span>％</span> Special Offers
     </a>
-
+    <a routerLink="/cart" routerLinkActive="active">
+      <span>🛒</span> Shopping Cart
+      @if (cartItemCount() > 0) {
+        <small class="cart-count">{{ cartItemCount() }}</small>
+      }
+    </a>
     <a routerLink="/orders" routerLinkActive="active">
-      <span>▣</span> Orders
+      <span>▣</span> My Orders
     </a>
-
     <a routerLink="/account" routerLinkActive="active">
       <span>♙</span> Account
     </a>
   </nav>
-
 </aside>
 
 <nav class="bottom-navigation">
-
-  <a routerLink="/overview" routerLinkActive="active">
-    <span>▦</span>
-    <small>Overview</small>
+  @if (isAdmin()) {
+    <a routerLink="/overview" routerLinkActive="active">
+      <span>▦</span>
+      <small>Dashboard</small>
+    </a>
+    <a routerLink="/inventory" routerLinkActive="active">
+      <span>▤</span>
+      <small>Inventory</small>
+    </a>
+    <a routerLink="/rules" routerLinkActive="active">
+      <span>☷</span>
+      <small>Rules</small>
+    </a>
+  }
+  <a routerLink="/discover" routerLinkActive="active">
+    <span>⌕</span>
+    <small>Discover</small>
   </a>
-
-  <a routerLink="/inventory" routerLinkActive="active">
-    <span>▤</span>
-    <small>Inventory</small>
+  <a routerLink="/offers" routerLinkActive="active">
+    <span>％</span>
+    <small>Offers</small>
   </a>
-
-  <a routerLink="/rules" routerLinkActive="active">
-    <span>☷</span>
-    <small>Rules</small>
+  <a routerLink="/cart" routerLinkActive="active">
+    <span>🛒</span>
+    <small>Cart @if (cartItemCount() > 0) { ({{ cartItemCount() }}) }</small>
   </a>
-
+  <a routerLink="/orders" routerLinkActive="active">
+    <span>▣</span>
+    <small>Orders</small>
+  </a>
   <a routerLink="/account" routerLinkActive="active">
     <span>♙</span>
     <small>Account</small>
   </a>
-
 </nav>

@@ -18,6 +18,7 @@ import {
 } from './services/product';
 
 import { BarcodeScannerService } from './services/barcode-scanner';
+import { AuthService } from './services/auth';
 
 interface ProductForm {
   name: string;
@@ -35,6 +36,8 @@ interface ProductForm {
   styleUrl: './app.css',
 })
 export class App implements OnInit {
+  private readonly authService = inject(AuthService);
+
   private readonly productService = inject(ProductService);
 
   private readonly barcodeScanner = inject(BarcodeScannerService);
@@ -45,6 +48,7 @@ export class App implements OnInit {
   protected readonly scanning = signal(false);
 
   protected readonly title = 'FoodSaver';
+  protected readonly isAuthenticated = this.authService.isAuthenticated;
 
   protected readonly activeView =
     signal<'dashboard' | 'inventory' | 'expiring'>('dashboard');

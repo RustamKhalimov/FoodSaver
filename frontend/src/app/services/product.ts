@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth';
 
 export interface Product {
   id: number;
@@ -11,6 +12,8 @@ export interface Product {
   expiry_date: string | null;
   quantity: number;
   regular_price: number;
+  discount_percent: number;
+  discounted_price: number;
   unit_size: string | null;
   created_at?: string;
   updated_at?: string;
@@ -18,7 +21,11 @@ export interface Product {
 
 export type ProductPayload = Omit<
   Product,
-  'id' | 'created_at' | 'updated_at'
+  'id' |
+  'created_at' |
+  'updated_at' |
+  'discount_percent' |
+  'discounted_price'
 >;
 
 @Injectable({
@@ -26,11 +33,20 @@ export type ProductPayload = Omit<
 })
 export class ProductService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   private readonly apiUrl = 'http://127.0.0.1:8000/api/products/';
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
+  }
+
+  getCatalog(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}catalog/`);
+  }
+
+  getProduct(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}${id}/`);
   }
 
   getExpiringProducts(): Observable<Product[]> {
@@ -40,7 +56,11 @@ export class ProductService {
   }
 
   addProduct(product: ProductPayload): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, product);
+    return this.http.post<Product>(
+      this.apiUrl,
+      product,
+      { headers: this.authService.authHeaders() }
+    );
   }
 
   updateProduct(
@@ -49,13 +69,15 @@ export class ProductService {
   ): Observable<Product> {
     return this.http.patch<Product>(
       `${this.apiUrl}${id}/`,
-      product
+      product,
+      { headers: this.authService.authHeaders() }
     );
   }
 
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.apiUrl}${id}/`
+      `${this.apiUrl}${id}/`,
+      { headers: this.authService.authHeaders() }
     );
   }
 }

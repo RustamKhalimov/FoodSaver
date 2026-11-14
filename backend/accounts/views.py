@@ -1,5 +1,4 @@
-
-from django.contrib.auth import authenticate
+﻿from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 from rest_framework import generics, status
@@ -8,7 +7,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import RegisterSerializer, ProfileSerializer
+from .models import get_user_role
+from .serializers import ProfileSerializer, RegisterSerializer
 
 
 class RegisterView(generics.CreateAPIView):
@@ -22,12 +22,14 @@ class RegisterView(generics.CreateAPIView):
         user = serializer.save()
 
         token, created = Token.objects.get_or_create(user=user)
+        role = get_user_role(user)
 
         return Response(
             {
                 'message': 'Registration successful.',
                 'token': token.key,
-                'user': ProfileSerializer(user).data
+                'user': ProfileSerializer(user).data,
+                'role': role,
             },
             status=status.HTTP_201_CREATED
         )
@@ -54,24 +56,26 @@ class LoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        user = authenticate(
+        authenticated_user = authenticate(
             request,
             username=user.username,
-            password=password
+            password=password,
         )
 
-        if user is None:
+        if authenticated_user is None:
             return Response(
                 {'error': 'Invalid email or password.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        token, created = Token.objects.get_or_create(user=user)
+        token, created = Token.objects.get_or_create(user=authenticated_user)
+        role = get_user_role(authenticated_user)
 
         return Response({
             'message': 'Login successful.',
             'token': token.key,
-            'user': ProfileSerializer(user).data
+            'user': ProfileSerializer(authenticated_user).data,
+            'role': role,
         })
 
 

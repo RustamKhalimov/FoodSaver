@@ -1,0 +1,82 @@
+<section class="detail-page">
+  <a class="back-link" routerLink="/discover">← Continue shopping</a>
+
+  @if (loading()) {
+    <div class="detail-message">Loading product...</div>
+  } @else if (error() && !product()) {
+    <div class="detail-message error">{{ error() }}</div>
+  } @else if (product(); as item) {
+    <article class="detail-card">
+      <div class="detail-image">
+        @if (item.image_url) {
+          <img [src]="item.image_url" [alt]="item.name">
+        } @else {
+          <span aria-hidden="true">🥬</span>
+        }
+        @if (item.discount_percent > 0) {
+          <span class="discount-label">Save {{ item.discount_percent }}%</span>
+        }
+      </div>
+
+      <div class="detail-info">
+        <span class="category">{{ item.category }}</span>
+        <h1>{{ item.name }}</h1>
+        @if (item.unit_size) {
+          <p>{{ item.unit_size }}</p>
+        }
+
+        <div class="detail-price">
+          @if (item.discount_percent > 0) {
+            <strong>{{ item.discounted_price | number:'1.2-2' }} ₸</strong>
+            <s>{{ item.regular_price | number:'1.2-2' }} ₸</s>
+          } @else {
+            <strong>{{ item.regular_price | number:'1.2-2' }} ₸</strong>
+          }
+        </div>
+
+        <dl class="product-facts">
+          <div>
+            <dt>Category</dt>
+            <dd>{{ item.category }}</dd>
+          </div>
+          <div>
+            <dt>Expiration date</dt>
+            <dd>{{ item.expiry_date || 'Not specified' }}</dd>
+          </div>
+          <div>
+            <dt>Availability</dt>
+            <dd>
+              @if (unavailable()) {
+                Unavailable
+              } @else {
+                {{ item.quantity }} available
+              }
+            </dd>
+          </div>
+        </dl>
+
+        @if (error()) {
+          <p class="feedback error">{{ error() }}</p>
+        }
+        @if (success()) {
+          <p class="feedback success">{{ success() }}</p>
+        }
+
+        <div class="cart-action">
+          <label for="quantity">Quantity</label>
+          <input
+            id="quantity"
+            type="number"
+            min="1"
+            [max]="item.quantity"
+            [disabled]="unavailable()"
+            [value]="quantity()"
+            (input)="changeQuantity(+$any($event.target).value)">
+          <button type="button" [disabled]="unavailable()" (click)="addToCart()">
+            Add to cart
+          </button>
+        </div>
+      </div>
+    </article>
+  }
+</section>

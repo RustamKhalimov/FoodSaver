@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth';
 
 export interface DiscountRule {
   id: number;
@@ -16,6 +17,7 @@ export interface DiscountRule {
 })
 export class DiscountRuleService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   private readonly apiUrl =
     'http://127.0.0.1:8000/api/discount-rules/';
@@ -25,6 +27,10 @@ export class DiscountRuleService {
   }
 
   updateRules(rules: Partial<DiscountRule>): Observable<DiscountRule> {
-    return this.http.patch<DiscountRule>(this.apiUrl, rules);
+    return this.http.patch<DiscountRule>(
+      this.apiUrl,
+      rules,
+      { headers: this.authService.authHeaders() }
+    );
   }
 }

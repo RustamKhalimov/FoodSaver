@@ -46,9 +46,12 @@ export class Register {
       email: this.email.trim(),
       password: this.password
     }).subscribe({
-      next: () => {
+      next: (response) => {
         this.isLoading = false;
-        this.router.navigate(['/overview']);
+
+        const role = response.role ?? response.user.role;
+        const destination = role === 'admin' ? '/overview' : '/discover';
+        this.router.navigate([destination]);
       },
       error: (error) => {
         this.isLoading = false;

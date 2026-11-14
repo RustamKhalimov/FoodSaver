@@ -1,0 +1,98 @@
+<section class="cart-page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">SHOPPING</span>
+      <h1>Shopping Cart</h1>
+      <p>{{ cart.itemCount() }} item(s) in your cart</p>
+    </div>
+  </header>
+
+  @if (error()) {
+    <div class="cart-alert error">{{ error() }}</div>
+  } @else if (loading()) {
+    <div class="cart-empty">Loading cart...</div>
+  } @else if (lines().length === 0) {
+    <div class="cart-empty">
+      <h2>Your cart is empty</h2>
+      <p>Discover fresh products and current discounts.</p>
+      <a routerLink="/discover">Continue shopping</a>
+    </div>
+  } @else {
+    <div class="cart-layout">
+      <section class="cart-items" aria-label="Cart items">
+        @for (line of lines(); track line.product_id) {
+          <article class="cart-item">
+            @if (line.product?.image_url) {
+              <img [src]="line.product?.image_url" [alt]="line.product?.name">
+            } @else {
+              <div class="cart-placeholder" aria-hidden="true">🥬</div>
+            }
+
+            <div class="cart-product">
+              <h2>{{ line.product?.name || 'Product no longer available' }}</h2>
+              @if (line.product) {
+                <p>{{ line.product.category }}</p>
+                @if (line.product.expiry_date) {
+                  <p>Best before {{ line.product.expiry_date }}</p>
+                }
+                @if (!isAvailable(line.product) || line.product.quantity < line.quantity) {
+                  <strong class="unavailable">
+                    Stock or expiration changed. Remove this item or adjust quantity.
+                  </strong>
+                }
+              }
+            </div>
+
+            <label class="quantity-control">
+              <span>Qty</span>
+              <input
+                type="number"
+                min="1"
+                [max]="line.product?.quantity || 1"
+                [disabled]="!line.product || line.product.quantity < 1"
+                [value]="line.quantity"
+                (input)="setQuantity(line.product_id, +$any($event.target).value)">
+            </label>
+
+            <div class="item-price">
+              @if (line.product) {
+                <strong>
+                  {{ lineTotal(line.product, line.quantity) | number:'1.2-2' }} ₸
+                </strong>
+                <small>
+                  {{ line.product.discounted_price | number:'1.2-2' }} ₸ each
+                </small>
+              } @else {
+                <strong>Unavailable</strong>
+              }
+            </div>
+
+            <button
+              type="button"
+              class="remove-button"
+              (click)="remove(line.product_id)">
+              Remove
+            </button>
+          </article>
+        }
+      </section>
+
+      <aside class="cart-summary">
+        <h2>Order summary</h2>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <strong>{{ total() | number:'1.2-2' }} ₸</strong>
+        </div>
+        <p>Prices and stock are confirmed when your order is placed.</p>
+        @if (canCheckout()) {
+          <a class="checkout-button" routerLink="/checkout">Proceed to checkout</a>
+        } @else {
+          <button type="button" class="checkout-button" disabled>
+            Update cart to continue
+          </button>
+        }
+        <a class="continue-link" routerLink="/discover">Continue shopping</a>
+      </aside>
+    </div>
+  }
+</section>

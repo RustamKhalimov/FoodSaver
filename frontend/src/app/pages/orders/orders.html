@@ -1,0 +1,72 @@
+<section class="orders-page">
+  <header class="orders-header">
+    <div>
+      <span class="eyebrow">SHOPPING</span>
+      <h1>{{ selectedOrder() ? 'Order details' : 'My Orders' }}</h1>
+      <p>Your order history and confirmations.</p>
+    </div>
+    <a routerLink="/discover">Continue shopping</a>
+  </header>
+
+  @if (confirmed()) {
+    <div class="confirmation">
+      <strong>Order confirmed.</strong>
+      No payment or delivery has been processed.
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="orders-empty">Loading orders...</div>
+  } @else if (error()) {
+    <div class="orders-empty error">{{ error() }}</div>
+  } @else if (selectedOrder(); as order) {
+    <article class="order-card">
+      <div class="order-heading">
+        <div>
+          <h2>Order #{{ order.id }}</h2>
+          <span>{{ order.created_at | date:'medium' }}</span>
+        </div>
+        <span class="status">{{ order.status }}</span>
+      </div>
+      @for (item of order.items; track item.id) {
+        <div class="order-line">
+          <div>
+            <strong>{{ item.product_name }}</strong>
+            <span>{{ item.quantity }} × {{ item.unit_price | number:'1.2-2' }} ₸</span>
+          </div>
+          <strong>{{ item.line_total | number:'1.2-2' }} ₸</strong>
+        </div>
+      }
+      <div class="order-total">
+        <span>Total</span>
+        <strong>{{ order.total | number:'1.2-2' }} ₸</strong>
+      </div>
+      <a routerLink="/orders">Back to My Orders</a>
+    </article>
+  } @else if (orders().length === 0) {
+    <div class="orders-empty">
+      <h2>No orders yet</h2>
+      <p>Your completed order confirmations will appear here.</p>
+      <a routerLink="/discover">Browse products</a>
+    </div>
+  } @else {
+    <section class="order-list">
+      @for (order of orders(); track order.id) {
+        <a class="order-card order-link" [routerLink]="['/orders', order.id]">
+          <div class="order-heading">
+            <div>
+              <h2>Order #{{ order.id }}</h2>
+              <span>{{ order.created_at | date:'medium' }}</span>
+            </div>
+            <span class="status">{{ order.status }}</span>
+          </div>
+          <p>{{ order.items.length }} product line(s)</p>
+          <div class="order-total">
+            <span>Total</span>
+            <strong>{{ order.total | number:'1.2-2' }} ₸</strong>
+          </div>
+        </a>
+      }
+    </section>
+  }
+</section>

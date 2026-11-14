@@ -1,0 +1,122 @@
+<section class="catalog-page">
+  <header class="catalog-header">
+    <span class="eyebrow">FOODSAVER MARKET</span>
+    <h1>{{ isOffersPage ? 'Special Offers' : 'Discover products' }}</h1>
+    <p>Find fresh products and save on items close to their best-before date.</p>
+  </header>
+
+  <section class="catalog-filters" aria-label="Catalog filters">
+    <label>
+      <span>Search products</span>
+      <input
+        type="search"
+        placeholder="Search by name or category"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)">
+    </label>
+
+    <label>
+      <span>Category</span>
+      <select
+        [ngModel]="categoryFilter()"
+        (ngModelChange)="categoryFilter.set($event)">
+        @for (category of categories(); track category) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="discount-filter">
+      <input
+        type="checkbox"
+        [ngModel]="discountedOnly()"
+        (ngModelChange)="discountedOnly.set($event)">
+      <span>Discounted only</span>
+    </label>
+
+    <label>
+      <span>Minimum price</span>
+      <input
+        type="number"
+        min="0"
+        placeholder="0"
+        [ngModel]="minimumPrice()"
+        (ngModelChange)="minimumPrice.set($event)">
+    </label>
+
+    <label>
+      <span>Maximum price</span>
+      <input
+        type="number"
+        min="0"
+        placeholder="Any"
+        [ngModel]="maximumPrice()"
+        (ngModelChange)="maximumPrice.set($event)">
+    </label>
+
+    <label>
+      <span>Sort by</span>
+      <select
+        [ngModel]="sortOrder()"
+        (ngModelChange)="sortOrder.set($event)">
+        <option value="expiry">Expiration date</option>
+        <option value="price-asc">Price: low to high</option>
+        <option value="price-desc">Price: high to low</option>
+      </select>
+    </label>
+
+    <button class="clear-filters" type="button" (click)="clearFilters()">
+      Clear filters
+    </button>
+  </section>
+
+  @if (error()) {
+    <div class="catalog-message error">{{ error() }}</div>
+  } @else if (loading()) {
+    <div class="catalog-message">Loading products...</div>
+  } @else if (filteredProducts().length === 0) {
+    <div class="catalog-message">No products match your filters.</div>
+  } @else {
+    <section class="product-grid" aria-label="Products">
+      @for (product of filteredProducts(); track product.id) {
+        <a
+          class="product-card"
+          [routerLink]="['/product', product.id]"
+          [attr.aria-label]="'View ' + product.name">
+          <div class="product-image">
+            @if (product.image_url) {
+              <img [src]="product.image_url" [alt]="product.name">
+            } @else {
+              <span aria-hidden="true">🥬</span>
+            }
+            @if (getDiscount(product) > 0) {
+              <span class="discount-badge">-{{ getDiscount(product) }}%</span>
+            }
+          </div>
+          <div class="product-details">
+            <span class="category">{{ product.category }}</span>
+            <h2>{{ product.name }}</h2>
+            @if (product.unit_size) {
+              <p class="unit-size">{{ product.unit_size }}</p>
+            }
+            <p class="stock">{{ product.quantity }} in stock</p>
+            @if (product.expiry_date) {
+              <p class="expiry">Best before {{ product.expiry_date }}</p>
+            }
+            <div class="price-row">
+              @if (product.discount_percent > 0) {
+                <strong>
+                  {{ product.discounted_price | number:'1.2-2' }} ₸
+                </strong>
+                <s>{{ product.regular_price | number:'1.2-2' }} ₸</s>
+                <small>-{{ product.discount_percent }}%</small>
+              } @else {
+                <strong>{{ product.regular_price | number:'1.2-2' }} ₸</strong>
+              }
+            </div>
+          </div>
+        </a>
+      }
+    </section>
+  }
+</section>
