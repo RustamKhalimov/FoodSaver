@@ -42,11 +42,41 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
+    notifications_enabled = serializers.BooleanField(
+        source='profile.notifications_enabled',
+        required=False,
+    )
+    reminder_time = serializers.TimeField(
+        source='profile.reminder_time',
+        format='%H:%M',
+        required=False,
+    )
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role']
+        fields = [
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'role',
+            'notifications_enabled',
+            'reminder_time',
+        ]
         read_only_fields = ['id', 'username', 'role']
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', {})
+        user = super().update(instance, validated_data)
+
+        if profile_data:
+            profile = user.profile
+            for field, value in profile_data.items():
+                setattr(profile, field, value)
+            profile.save(update_fields=[*profile_data.keys()])
+
+        return user
 
     def get_role(self, obj):
         return get_user_role(obj) or UserProfile.ROLE_CUSTOMER

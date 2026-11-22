@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from datetime import time
 
 
 class UserProfile(models.Model):
@@ -13,6 +14,8 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default=ROLE_CUSTOMER)
+    notifications_enabled = models.BooleanField(default=False)
+    reminder_time = models.TimeField(default=time(9, 0))
 
     class Meta:
         verbose_name = 'user profile'

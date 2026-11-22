@@ -74,3 +74,37 @@ class AccountAPITests(TestCase):
         response = self.client.get('/api/accounts/profile/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['role'], UserProfile.ROLE_ADMIN)
+
+    def test_profile_saves_and_restores_reminder_preferences(self):
+        customer = User.objects.create_user(
+            username='reminder-customer',
+            email='reminder@example.com',
+            password='StrongPass123!xyz',
+        )
+        self.client.force_authenticate(user=customer)
+
+        initial = self.client.get('/api/accounts/profile/')
+        self.assertEqual(initial.status_code, 200)
+        self.assertFalse(initial.data['notifications_enabled'])
+        self.assertEqual(initial.data['reminder_time'], '09:00')
+
+        updated = self.client.patch(
+            '/api/accounts/profile/',
+            {'notifications_enabled': True, 'reminder_time': '17:45'},
+            format='json',
+        )
+        self.assertEqual(updated.status_code, 200)
+        self.assertTrue(updated.data['notifications_enabled'])
+        self.assertEqual(updated.data['reminder_time'], '17:45')
+
+        restored = self.client.get('/api/accounts/profile/')
+        self.assertTrue(restored.data['notifications_enabled'])
+        self.assertEqual(restored.data['reminder_time'], '17:45')
+
+        disabled = self.client.patch(
+            '/api/accounts/profile/',
+            {'notifications_enabled': False},
+            format='json',
+        )
+        self.assertEqual(disabled.status_code, 200)
+        self.assertFalse(disabled.data['notifications_enabled'])

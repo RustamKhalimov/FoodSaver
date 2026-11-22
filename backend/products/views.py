@@ -40,6 +40,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         products = Product.objects.filter(
             expiry_date__isnull=False,
+            expiry_date__gte=today,
             expiry_date__lte=last_day
         ).order_by('expiry_date', 'name')
 

@@ -19,14 +19,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Security settings
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY',
-    'django-insecure-amblwep47tmi!p3hq_*y)l3^kla=+@gq!24uya6kr!%owg2q_q'
-)
-
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    if not DEBUG:
+        raise RuntimeError('DJANGO_SECRET_KEY must be set when DEBUG is disabled.')
+    SECRET_KEY = 'django-insecure-local-development-only-change-before-deploying'
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        'DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost,testserver'
+    ).split(',')
+    if host.strip()
+]
 
 
 # Application definition
@@ -115,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ.get('DJANGO_TIME_ZONE', 'Asia/Qyzylorda')
 
 USE_I18N = True
 
@@ -135,8 +142,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS settings
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
-    "http://127.0.0.1:4200",
+    origin.strip()
+    for origin in os.environ.get(
+        'DJANGO_CORS_ALLOWED_ORIGINS',
+        'http://localhost:4200,http://127.0.0.1:4200',
+    ).split(',')
+    if origin.strip()
 ]
 
 REST_FRAMEWORK = {

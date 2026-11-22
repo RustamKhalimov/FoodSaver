@@ -232,7 +232,7 @@ class ProductAPITests(TestCase):
         names = [item['name'] for item in res.data]
         self.assertEqual(names, ['Bread', 'Salt'])
 
-    def test_expiring_endpoint_includes_expired_and_within_3_days(self):
+    def test_expiring_endpoint_includes_today_through_day_3_only_in_date_order(self):
         Product.objects.create(
             name='Expired Yogurt',
             expiry_date=self.today - timedelta(days=1),
@@ -242,6 +242,16 @@ class ProductAPITests(TestCase):
             name='Expiring Milk',
             expiry_date=self.today + timedelta(days=2),
             quantity=5,
+        )
+        Product.objects.create(
+            name='Expires Today',
+            expiry_date=self.today,
+            quantity=1,
+        )
+        Product.objects.create(
+            name='Expires Day 3',
+            expiry_date=self.today + timedelta(days=3),
+            quantity=2,
         )
         Product.objects.create(
             name='Fresh Apples',
@@ -257,7 +267,7 @@ class ProductAPITests(TestCase):
         res = self.client.get('/api/products/expiring/')
         self.assertEqual(res.status_code, 200)
         names = [item['name'] for item in res.data]
-        self.assertEqual(names, ['Expired Yogurt', 'Expiring Milk'])
+        self.assertEqual(names, ['Expires Today', 'Expiring Milk', 'Expires Day 3'])
 
     def test_only_admin_can_change_discount_rules(self):
         self.client.force_authenticate(user=self.customer)
