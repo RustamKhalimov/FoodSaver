@@ -1,8 +1,15 @@
+from datetime import timedelta, time
+from decimal import Decimal
+
+from django.core import mail
+from django.core.management import call_command
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from django.utils import timezone
 from rest_framework.test import APIClient
 
-from .models import UserProfile, get_user_role
+from products.models import Product
+from .models import ReminderDelivery, UserProfile, get_user_role
 
 
 class AccountAPITests(TestCase):
@@ -108,3 +115,49 @@ class AccountAPITests(TestCase):
         )
         self.assertEqual(disabled.status_code, 200)
         self.assertFalse(disabled.data['notifications_enabled'])
+
+
+@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+class ExpiryReminderCommandTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='email-reminder-customer',
+            email='email-reminder@example.com',
+            password='StrongPass123!xyz',
+        )
+        self.user.profile.notifications_enabled = True
+        self.user.profile.reminder_time = time(9, 0)
+        self.user.profile.save(update_fields=['notifications_enabled', 'reminder_time'])
+        Product.objects.create(
+            name='Reminder Milk',
+            category='Dairy',
+            quantity=2,
+            regular_price=Decimal('850.00'),
+            expiry_date=timezone.localdate() + timedelta(days=1),
+        )
+
+    def test_command_sends_one_daily_email_with_expiring_items(self):
+        call_command('send_expiry_reminders', at='09:00')
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.user.email])
+        self.assertIn('Reminder Milk', mail.outbox[0].body)
+        self.assertEqual(ReminderDelivery.objects.filter(user=self.user).count(), 1)
+
+        call_command('send_expiry_reminders', at='09:00')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(ReminderDelivery.objects.filter(user=self.user).count(), 1)
+
+    def test_command_dry_run_does_not_send_or_record(self):
+        call_command('send_expiry_reminders', at='09:00', dry_run=True)
+
+        self.assertEqual(mail.outbox, [])
+        self.assertFalse(ReminderDelivery.objects.filter(user=self.user).exists())
+
+    def test_command_skips_when_no_products_are_expiring(self):
+        Product.objects.all().delete()
+
+        call_command('send_expiry_reminders', at='09:00')
+
+        self.assertEqual(mail.outbox, [])
+        self.assertFalse(ReminderDelivery.objects.filter(user=self.user).exists())

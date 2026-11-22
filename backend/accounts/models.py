@@ -25,6 +25,29 @@ class UserProfile(models.Model):
         return f'{self.user.username} ({self.role})'
 
 
+class ReminderDelivery(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='reminder_deliveries',
+    )
+    delivery_date = models.DateField()
+    products_count = models.PositiveIntegerField(default=0)
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'delivery_date'],
+                name='unique_daily_reminder_per_user',
+            )
+        ]
+        ordering = ['-delivery_date', '-sent_at']
+
+    def __str__(self):
+        return f'{self.user.email} reminder on {self.delivery_date}'
+
+
 def get_user_role(user):
     if user is None or not user.is_authenticated:
         return None
