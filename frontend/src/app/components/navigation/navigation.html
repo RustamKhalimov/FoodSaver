@@ -1,6 +1,6 @@
 <aside class="sidebar">
   <a class="brand" routerLink="/discover">
-    <span class="brand-icon">🌱</span>
+    <span class="brand-icon">FS</span>
     <span>FoodSaver</span>
     <small>STORE</small>
   </a>
@@ -10,13 +10,13 @@
 
     <nav class="nav-links">
       <a routerLink="/overview" routerLinkActive="active">
-        <span>▦</span> Dashboard
+        Dashboard
       </a>
       <a routerLink="/inventory" routerLinkActive="active">
-        <span>▤</span> Inventory
+        Inventory
       </a>
       <a routerLink="/rules" routerLinkActive="active">
-        <span>☷</span> Rules
+        Discount rules
       </a>
     </nav>
   }
@@ -24,22 +24,22 @@
   <div class="nav-label shopping-label">SHOPPING</div>
   <nav class="nav-links">
     <a routerLink="/discover" routerLinkActive="active">
-      <span>⌕</span> Discover
+      Discover
     </a>
     <a routerLink="/offers" routerLinkActive="active">
-      <span>％</span> Special Offers
+      Special offers
     </a>
     <a routerLink="/cart" routerLinkActive="active">
-      <span>🛒</span> Shopping Cart
+      Shopping cart
       @if (cartItemCount() > 0) {
         <small class="cart-count">{{ cartItemCount() }}</small>
       }
     </a>
     <a routerLink="/orders" routerLinkActive="active">
-      <span>▣</span> My Orders
+      My orders
     </a>
     <a routerLink="/account" routerLinkActive="active">
-      <span>♙</span> Account
+      Account
     </a>
   </nav>
 </aside>
@@ -47,36 +47,28 @@
 <nav class="bottom-navigation">
   @if (isAdmin()) {
     <a routerLink="/overview" routerLinkActive="active">
-      <span>▦</span>
       <small>Dashboard</small>
     </a>
     <a routerLink="/inventory" routerLinkActive="active">
-      <span>▤</span>
       <small>Inventory</small>
     </a>
     <a routerLink="/rules" routerLinkActive="active">
-      <span>☷</span>
       <small>Rules</small>
     </a>
   }
   <a routerLink="/discover" routerLinkActive="active">
-    <span>⌕</span>
     <small>Discover</small>
   </a>
   <a routerLink="/offers" routerLinkActive="active">
-    <span>％</span>
     <small>Offers</small>
   </a>
   <a routerLink="/cart" routerLinkActive="active">
-    <span>🛒</span>
     <small>Cart @if (cartItemCount() > 0) { ({{ cartItemCount() }}) }</small>
   </a>
   <a routerLink="/orders" routerLinkActive="active">
-    <span>▣</span>
     <small>Orders</small>
   </a>
   <a routerLink="/account" routerLinkActive="active">
-    <span>♙</span>
     <small>Account</small>
   </a>
 </nav>

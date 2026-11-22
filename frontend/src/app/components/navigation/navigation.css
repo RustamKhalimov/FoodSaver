@@ -134,3 +134,136 @@
     font-weight: 700;
   }
 }
+
+/* Shared FoodSaver navigation system */
+.sidebar {
+  position: sticky;
+  top: 0;
+  width: 238px;
+  height: 100vh;
+  min-height: 0;
+  padding: 26px 18px;
+  background: var(--surface, #fffefa);
+  border-right-color: var(--line, #e3e4db);
+}
+
+.brand {
+  gap: 11px;
+  margin: 0 0 42px;
+  color: var(--ink, #23362b);
+  letter-spacing: -0.4px;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--green, #315f43);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.brand small {
+  margin-left: auto;
+  color: var(--muted, #69776d);
+  background: transparent;
+  border: 1px solid var(--line, #e3e4db);
+  border-radius: 4px;
+  font-size: 8px;
+  letter-spacing: 0.8px;
+}
+
+.nav-label {
+  margin-left: 11px;
+  color: var(--muted-soft, #879187);
+  font-size: 9px;
+  letter-spacing: 1.2px;
+}
+
+.nav-links {
+  gap: 3px;
+}
+
+.nav-links a {
+  position: relative;
+  min-height: 42px;
+  gap: 0;
+  padding: 11px 12px;
+  color: var(--muted, #69776d);
+  border-radius: 7px;
+  font-size: 13px;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--green-strong, #244d34);
+  background: var(--green-soft, #e9f0e8);
+}
+
+.nav-links a.active::before {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 3px;
+  background: var(--green, #315f43);
+  border-radius: 0 3px 3px 0;
+  content: "";
+}
+
+.shopping-label {
+  margin-top: 30px;
+}
+
+.cart-count {
+  color: #fff;
+  background: var(--green, #315f43);
+}
+
+.nav-links a .cart-count {
+  font-size: 11px;
+  line-height: 1;
+}
+
+@media (max-width: 650px) {
+  .sidebar {
+    display: none;
+  }
+
+  .bottom-navigation {
+    display: flex;
+    justify-content: flex-start;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 7px 8px calc(7px + env(safe-area-inset-bottom));
+    background: var(--surface, #fffefa);
+    border-top-color: var(--line, #e3e4db);
+    scrollbar-width: none;
+  }
+
+  .bottom-navigation::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bottom-navigation a {
+    flex: 0 0 68px;
+    min-height: 49px;
+    justify-content: center;
+    gap: 0;
+    padding: 6px 3px;
+    color: var(--muted, #69776d);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  .bottom-navigation small {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .bottom-navigation a.active {
+    color: var(--green-strong, #244d34);
+    background: var(--green-soft, #e9f0e8);
+  }
+}

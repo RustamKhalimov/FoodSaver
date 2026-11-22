@@ -144,6 +144,39 @@
   box-shadow: 0 5px 18px rgba(32, 59, 43, 0.06);
 }
 
+.product-card.expired-product {
+  border-color: #d8a09a;
+  border-left: 4px solid #a43e36;
+  background: #fff3f1;
+}
+
+.expired-product .product-image {
+  filter: grayscale(0.72);
+  background: #f2e4e2;
+}
+
+.expired-product .product-details h3 {
+  color: #87332d;
+}
+
+.product-card.urgent-product {
+  border-left: 4px solid #d26b1f;
+  background: #fff8f0;
+}
+
+.product-card.expiring-product {
+  border-left: 4px solid #c79a27;
+  background: #fffcf1;
+}
+
+.product-card.fresh-product {
+  border-left: 4px solid #4f8a57;
+}
+
+.product-card.no-expiry-product {
+  border-left: 4px solid #a3aaa2;
+}
+
 .product-image {
   display: grid;
   flex-shrink: 0;
@@ -151,15 +184,18 @@
   width: 75px;
   height: 75px;
   overflow: hidden;
-  background: #edf1e8;
+  padding: 5px;
+  background: #f7f8f3;
   border-radius: 14px;
   font-size: 28px;
 }
 
 .product-image img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 
 .product-details {
@@ -188,8 +224,30 @@
 }
 
 .status.urgent {
-  color: #a56a2e;
-  background: #fff0dc;
+  color: #8a4b10;
+  background: #ffead0;
+  font-weight: 700;
+}
+
+.status.expiring-soon {
+  color: #805900;
+  background: #fff3cd;
+}
+
+.status.fresh {
+  color: #246443;
+  background: #e7f3e9;
+}
+
+.status.expired {
+  color: #8c2e28;
+  background: #f8d9d5;
+  font-weight: 700;
+}
+
+.status.no-expiry {
+  color: #5b655d;
+  background: #ecefea;
 }
 
 .product-price {
@@ -312,15 +370,18 @@
   height: 85px;
   flex-shrink: 0;
   overflow: hidden;
-  background: #eaf1e6;
+  padding: 5px;
+  background: #f7f8f3;
   border-radius: 17px;
   font-size: 35px;
 }
 
 .image-preview img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 
 .image-info {
@@ -560,5 +621,125 @@
 
   .form-actions {
     flex-direction: column-reverse;
+  }
+}
+
+.inventory-page {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 42px 40px 54px;
+  color: var(--ink, #23362b);
+  background: var(--paper, #f5f4ee);
+}
+
+.inventory-header h1 {
+  color: var(--ink, #23362b);
+  font-size: clamp(27px, 3vw, 34px);
+  letter-spacing: -0.6px;
+}
+
+.inventory-header p,
+.list-heading,
+.product-details p {
+  color: var(--muted, #69776d);
+}
+
+.add-button {
+  width: auto;
+  min-width: 112px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 13px;
+}
+
+.search-box {
+  background: var(--surface, #fffefa);
+  border-color: var(--line, #e3e4db);
+  border-radius: var(--radius-md, 10px);
+}
+
+.product-card {
+  gap: 16px;
+  padding: 14px;
+  background: var(--surface, #fffefa);
+  border: 1px solid var(--line, #e3e4db);
+  border-radius: var(--radius-md, 10px);
+  box-shadow: none;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(35, 54, 43, 0.06));
+}
+
+.product-image {
+  padding: 5px;
+  background: #f0f1e9;
+  border-radius: 8px;
+}
+
+.product-details h3,
+.product-price strong {
+  color: var(--ink, #23362b);
+}
+
+.card-actions button {
+  color: var(--green-strong, #244d34);
+  background: var(--green-soft, #e9f0e8);
+}
+
+.card-actions .delete-action {
+  color: var(--red, #953e37);
+  background: var(--red-soft, #f9e8e5);
+}
+
+.product-modal {
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--surface, #fffefa);
+  border: 1px solid var(--line, #e3e4db);
+  border-radius: var(--radius-lg, 16px);
+}
+
+.modal-header h2 {
+  color: var(--ink, #23362b);
+}
+
+.save-button {
+  background: var(--green, #315f43);
+}
+
+.save-button:hover {
+  background: var(--green-strong, #244d34);
+}
+
+@media (max-width: 820px) {
+  .inventory-page {
+    padding: 30px 24px 96px;
+  }
+}
+
+@media (max-width: 480px) {
+  .inventory-page {
+    padding: 24px 16px 96px;
+  }
+
+  .inventory-header {
+    gap: 12px;
+  }
+
+  .add-button {
+    min-width: 44px;
+    font-size: 22px;
+  }
+
+  .product-card {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .product-price {
+    width: 100%;
+    align-items: flex-start;
   }
 }

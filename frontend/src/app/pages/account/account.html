@@ -81,6 +81,40 @@
             />
           </div>
 
+          <h3>Reminder preferences</h3>
+          <p class="section-description">
+            Get a daily email with products that expire within three days.
+          </p>
+
+          <label class="reminder-toggle">
+            <input
+              type="checkbox"
+              name="notificationsEnabled"
+              [(ngModel)]="notificationsEnabled"
+            />
+            Enable email reminders
+          </label>
+
+          <div class="form-group">
+            <label for="reminderTime">Daily reminder time (Asia/Qyzylorda)</label>
+            <input
+              id="reminderTime"
+              type="time"
+              name="reminderTime"
+              [(ngModel)]="reminderTime"
+            />
+          </div>
+
+          @if (!notificationsEnabled) {
+            <p class="reminder-warning" role="status">
+              Email reminders are off. Turn them on and save to start receiving them.
+            </p>
+          } @else {
+            <p class="reminder-warning" role="status">
+              A daily email will be sent to {{ email }} at {{ reminderTime }}. Email delivery must be configured on the FoodSaver server.
+            </p>
+          }
+
           <button
             type="submit"
             class="primary-btn"

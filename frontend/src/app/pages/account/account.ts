@@ -25,6 +25,8 @@ export class Account implements OnInit {
   email = '';
   firstName = '';
   lastName = '';
+  notificationsEnabled = false;
+  reminderTime = '09:00';
 
   oldPassword = '';
   newPassword = '';
@@ -64,6 +66,8 @@ export class Account implements OnInit {
           this.email = user.email;
           this.firstName = user.first_name;
           this.lastName = user.last_name;
+          this.notificationsEnabled = user.notifications_enabled ?? false;
+          this.reminderTime = user.reminder_time ?? '09:00';
         },
         error: () => {
           this.errorMessage =
@@ -88,7 +92,9 @@ export class Account implements OnInit {
     this.authService.updateProfile({
       email: this.email.trim(),
       first_name: this.firstName.trim(),
-      last_name: this.lastName.trim()
+      last_name: this.lastName.trim(),
+      notifications_enabled: this.notificationsEnabled,
+      reminder_time: this.reminderTime
     })
     .pipe(
       finalize(() => {
@@ -102,6 +108,8 @@ export class Account implements OnInit {
         this.email = user.email;
         this.firstName = user.first_name;
         this.lastName = user.last_name;
+        this.notificationsEnabled = user.notifications_enabled ?? false;
+        this.reminderTime = user.reminder_time ?? '09:00';
 
         this.successMessage = 'Profile updated successfully.';
       },

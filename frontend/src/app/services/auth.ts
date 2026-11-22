@@ -2,6 +2,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export type UserRole = 'admin' | 'customer';
 
@@ -12,6 +13,8 @@ export interface AuthUser {
   first_name: string;
   last_name: string;
   role: UserRole;
+  notifications_enabled?: boolean;
+  reminder_time?: string;
 }
 
 export interface AuthResponse {
@@ -25,7 +28,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/accounts/';
+  private readonly apiUrl = `${environment.apiUrl}/accounts/`;
   private readonly tokenKey = 'foodsaver_token';
   private readonly userKey = 'foodsaver_user';
   readonly currentUser = signal<AuthUser | null>(this.readStoredUser());
@@ -81,6 +84,8 @@ export class AuthService {
     email: string;
     first_name: string;
     last_name: string;
+    notifications_enabled: boolean;
+    reminder_time: string;
   }): Observable<AuthUser> {
     return this.http.patch<AuthUser>(
       `${this.apiUrl}profile/`,

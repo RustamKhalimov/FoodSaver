@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth';
+import { environment } from '../../environments/environment';
 
 export interface Product {
   id: number;
@@ -35,7 +36,7 @@ export class ProductService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
 
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/products/';
+  private readonly apiUrl = `${environment.apiUrl}/products/`;
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);

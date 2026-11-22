@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { AuthService } from './auth';
+import { environment } from '../../environments/environment';
 
 export interface CartEntry {
   product_id: number;
@@ -110,7 +111,7 @@ export class ShoppingCartService {
 export class OrderService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/orders/';
+  private readonly apiUrl = `${environment.apiUrl}/orders/`;
 
   placeOrder(items: CartEntry[]): Observable<Order> {
     return this.http.post<Order>(

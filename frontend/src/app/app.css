@@ -567,18 +567,19 @@ button:disabled {
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background: #f7f8f1;
+  background: var(--paper, #f5f4ee);
 }
 
 .main-content {
   flex: 1;
   min-width: 0;
   min-height: 100vh;
+  background: var(--paper, #f5f4ee);
 }
 
 @media (max-width: 650px) {
   .main-content {
-    padding-bottom: 85px;
+    padding-bottom: 0;
   }
 }
 

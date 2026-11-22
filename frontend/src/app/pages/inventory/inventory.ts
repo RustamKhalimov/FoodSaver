@@ -18,6 +18,10 @@ import {
   DiscountRule,
   DiscountRuleService
 } from '../../services/discount-rule';
+import {
+  expirationLabel,
+  expirationStatus
+} from './expiration-status';
 
 interface ProductForm {
   name: string;
@@ -179,22 +183,11 @@ export class Inventory implements OnInit {
   }
 
   protected getStatus(product: Product): string {
-    if (!product.expiry_date) return 'No expiry date';
+    return expirationLabel(product.expiry_date);
+  }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const expiry = new Date(`${product.expiry_date}T00:00:00`);
-    const days = Math.round(
-      (expiry.getTime() - today.getTime()) / 86400000
-    );
-
-    if (days < 0) return 'Expired';
-    if (days === 0) return 'Expires today';
-    if (days === 1) return '1 day left';
-    if (days === 2) return '2 days left';
-
-    return `Fresh · ${days} days left`;
+  protected getExpirationStatus(product: Product): string {
+    return expirationStatus(product.expiry_date);
   }
 
   protected getDiscount(product: Product): number {

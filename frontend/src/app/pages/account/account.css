@@ -123,6 +123,32 @@
   cursor: not-allowed;
 }
 
+.reminder-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  color: #34483a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reminder-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: #43865a;
+}
+
+.reminder-warning {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  color: #765516;
+  background: #fff4d8;
+  border-left: 3px solid #c58e25;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .primary-btn {
   width: 100%;
   padding: 13px;
@@ -180,5 +206,116 @@
   .page-header {
     align-items: flex-start;
     gap: 15px;
+  }
+}
+
+.account-container {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 42px 40px 54px;
+  color: var(--ink, #23362b);
+  background: var(--paper, #f5f4ee);
+}
+
+.page-header h1 {
+  color: var(--ink, #23362b);
+  font-size: clamp(27px, 3vw, 34px);
+  letter-spacing: -0.6px;
+}
+
+.page-header p,
+.section-description {
+  color: var(--muted, #69776d);
+}
+
+.account-grid {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 18px;
+}
+
+.account-card {
+  padding: 24px;
+  background: var(--surface, #fffefa);
+  border: 1px solid var(--line, #e3e4db);
+  border-radius: var(--radius-md, 10px);
+  box-shadow: none;
+}
+
+.account-card h3,
+.card-header h2 {
+  color: var(--ink, #23362b);
+}
+
+.card-header {
+  border-bottom-color: var(--line, #e3e4db);
+}
+
+.avatar {
+  background: var(--green-soft, #e9f0e8);
+  color: var(--green, #315f43);
+  border-radius: 9px;
+}
+
+.form-group label {
+  color: var(--ink, #23362b);
+}
+
+.form-group input {
+  min-height: 44px;
+  border-color: var(--line, #e3e4db);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.form-group input:focus {
+  border-color: var(--green, #315f43);
+  box-shadow: var(--focus-ring, 0 0 0 3px rgba(49, 95, 67, 0.2));
+}
+
+.primary-btn {
+  min-height: 46px;
+  background: var(--green, #315f43);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.primary-btn:hover {
+  background: var(--green-strong, #244d34);
+}
+
+.logout-btn {
+  min-height: 42px;
+  color: var(--red, #953e37);
+  border-color: var(--line, #e3e4db);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.success-message {
+  color: var(--green-strong, #244d34);
+  background: var(--green-soft, #e9f0e8);
+}
+
+.error-message {
+  color: var(--red, #953e37);
+  background: var(--red-soft, #f9e8e5);
+}
+
+@media (max-width: 900px) {
+  .account-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .account-container {
+    padding: 30px 24px 96px;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-container {
+    padding: 24px 16px 96px;
+  }
+
+  .account-card {
+    padding: 18px;
   }
 }

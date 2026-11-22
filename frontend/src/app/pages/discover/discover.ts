@@ -33,6 +33,17 @@ export class Discover implements OnInit {
     ...new Set(this.products().map(product => product.category))
   ]);
 
+  protected readonly featuredProduct = computed(() => {
+    const products = this.products();
+    return this.isOffersPage
+      ? products.find(product => product.discount_percent > 0) ?? products[0] ?? null
+      : products[0] ?? null;
+  });
+
+  protected readonly discountedProducts = computed(
+    () => this.products().filter(product => product.discount_percent > 0)
+  );
+
   protected readonly filteredProducts = computed(() => {
     const query = this.search().trim().toLowerCase();
     const minimum = this.minimumPrice() === ''

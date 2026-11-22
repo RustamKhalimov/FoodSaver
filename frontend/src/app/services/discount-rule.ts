@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth';
+import { environment } from '../../environments/environment';
 
 export interface DiscountRule {
   id: number;
@@ -19,8 +20,7 @@ export class DiscountRuleService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
 
-  private readonly apiUrl =
-    'http://127.0.0.1:8000/api/discount-rules/';
+  private readonly apiUrl = `${environment.apiUrl}/discount-rules/`;
 
   getRules(): Observable<DiscountRule> {
     return this.http.get<DiscountRule>(this.apiUrl);

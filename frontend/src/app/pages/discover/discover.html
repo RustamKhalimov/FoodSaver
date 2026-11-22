@@ -1,122 +1,239 @@
-<section class="catalog-page">
-  <header class="catalog-header">
-    <span class="eyebrow">FOODSAVER MARKET</span>
-    <h1>{{ isOffersPage ? 'Special Offers' : 'Discover products' }}</h1>
-    <p>Find fresh products and save on items close to their best-before date.</p>
-  </header>
+<section class="catalog-page" [class.offers-page]="isOffersPage">
+  <div class="market-ribbon">
+    <span>Good food, better value</span>
+    <a routerLink="/offers">See current offers <span aria-hidden="true">→</span></a>
+  </div>
 
-  <section class="catalog-filters" aria-label="Catalog filters">
-    <label>
-      <span>Search products</span>
+  <header class="market-header">
+    <a class="market-brand" routerLink="/discover" aria-label="FoodSaver home">
+      <span class="market-brand-mark">FS</span>
+      <span class="market-brand-copy">
+        <strong>FoodSaver</strong>
+        <small>Freshness, made simple</small>
+      </span>
+    </a>
+
+    <label class="market-search">
+      <span class="visually-hidden">Search products</span>
       <input
         type="search"
-        placeholder="Search by name or category"
+        placeholder="Search fresh products..."
         [ngModel]="search()"
         (ngModelChange)="search.set($event)">
+      <span class="search-hint" aria-hidden="true">⌕</span>
     </label>
 
-    <label>
-      <span>Category</span>
-      <select
-        [ngModel]="categoryFilter()"
-        (ngModelChange)="categoryFilter.set($event)">
-        @for (category of categories(); track category) {
-          <option [value]="category">{{ category }}</option>
-        }
-      </select>
-    </label>
+    <div class="market-actions">
+      <a class="market-offers-link" routerLink="/offers">Offers</a>
+      <a class="market-cart-link" routerLink="/cart">Cart</a>
+    </div>
+  </header>
 
-    <label class="discount-filter">
-      <input
-        type="checkbox"
-        [ngModel]="discountedOnly()"
-        (ngModelChange)="discountedOnly.set($event)">
-      <span>Discounted only</span>
-    </label>
+  <nav class="category-strip" aria-label="Browse product categories">
+    @for (category of categories(); track category) {
+      <button
+        type="button"
+        class="category-chip"
+        [class.active]="categoryFilter() === category"
+        [attr.aria-pressed]="categoryFilter() === category"
+        (click)="categoryFilter.set(category)">
+        <span class="category-dot" aria-hidden="true">{{ category === 'All' ? '•' : category.charAt(0) }}</span>
+        <span>{{ category === 'All' ? 'All products' : category }}</span>
+      </button>
+    }
+  </nav>
 
-    <label>
-      <span>Minimum price</span>
-      <input
-        type="number"
-        min="0"
-        placeholder="0"
-        [ngModel]="minimumPrice()"
-        (ngModelChange)="minimumPrice.set($event)">
-    </label>
+  <section class="market-hero" aria-label="FoodSaver marketplace">
+    <div class="hero-copy">
+      <span class="hero-kicker">{{ isOffersPage ? 'A little more for less' : 'Fresh picks for every day' }}</span>
+      <h1>{{ isOffersPage ? 'Good food. Better prices.' : 'Fresh food, brighter days.' }}</h1>
+      <p>Browse what’s in stock, check best-before dates, and find a good deal for today.</p>
+      <a class="hero-button" href="#catalog-products">{{ isOffersPage ? 'Browse offers' : 'Shop products' }}</a>
+      <div class="hero-proof">
+        <span>✓ Current stock</span>
+        <span>✓ Prices confirmed at checkout</span>
+      </div>
+    </div>
 
-    <label>
-      <span>Maximum price</span>
-      <input
-        type="number"
-        min="0"
-        placeholder="Any"
-        [ngModel]="maximumPrice()"
-        (ngModelChange)="maximumPrice.set($event)">
-    </label>
-
-    <label>
-      <span>Sort by</span>
-      <select
-        [ngModel]="sortOrder()"
-        (ngModelChange)="sortOrder.set($event)">
-        <option value="expiry">Expiration date</option>
-        <option value="price-asc">Price: low to high</option>
-        <option value="price-desc">Price: high to low</option>
-      </select>
-    </label>
-
-    <button class="clear-filters" type="button" (click)="clearFilters()">
-      Clear filters
-    </button>
+    @if (featuredProduct(); as featured) {
+      <a class="hero-feature" [routerLink]="['/product', featured.id]" [attr.aria-label]="'View ' + featured.name">
+        <div class="hero-feature-image">
+          @if (featured.image_url) {
+            <img [src]="featured.image_url" [alt]="featured.name">
+          } @else {
+            <span aria-hidden="true">{{ featured.name.charAt(0).toUpperCase() }}</span>
+          }
+          @if (featured.discount_percent > 0) {
+            <span class="hero-discount">Save {{ featured.discount_percent }}%</span>
+          }
+        </div>
+        <div class="hero-feature-caption">
+          <span>Featured today</span>
+          <strong>{{ featured.name }}</strong>
+          <b>{{ featured.discounted_price | number:'1.2-2' }} ₸</b>
+        </div>
+      </a>
+    } @else {
+      <div class="hero-art" aria-hidden="true">
+        <span>Good food</span>
+        <strong>Less waste</strong>
+      </div>
+    }
   </section>
 
-  @if (error()) {
-    <div class="catalog-message error">{{ error() }}</div>
-  } @else if (loading()) {
-    <div class="catalog-message">Loading products...</div>
-  } @else if (filteredProducts().length === 0) {
-    <div class="catalog-message">No products match your filters.</div>
-  } @else {
-    <section class="product-grid" aria-label="Products">
-      @for (product of filteredProducts(); track product.id) {
-        <a
-          class="product-card"
-          [routerLink]="['/product', product.id]"
-          [attr.aria-label]="'View ' + product.name">
-          <div class="product-image">
-            @if (product.image_url) {
-              <img [src]="product.image_url" [alt]="product.name">
-            } @else {
-              <span aria-hidden="true">🥬</span>
-            }
-            @if (getDiscount(product) > 0) {
-              <span class="discount-badge">-{{ getDiscount(product) }}%</span>
-            }
-          </div>
-          <div class="product-details">
-            <span class="category">{{ product.category }}</span>
-            <h2>{{ product.name }}</h2>
-            @if (product.unit_size) {
-              <p class="unit-size">{{ product.unit_size }}</p>
-            }
-            <p class="stock">{{ product.quantity }} in stock</p>
-            @if (product.expiry_date) {
-              <p class="expiry">Best before {{ product.expiry_date }}</p>
-            }
-            <div class="price-row">
-              @if (product.discount_percent > 0) {
-                <strong>
-                  {{ product.discounted_price | number:'1.2-2' }} ₸
-                </strong>
-                <s>{{ product.regular_price | number:'1.2-2' }} ₸</s>
-                <small>-{{ product.discount_percent }}%</small>
+  @if (discountedProducts().length > 0 && !isOffersPage) {
+    <section class="deals-section" aria-labelledby="deals-heading">
+      <div class="section-title-row">
+        <div>
+          <span class="section-kicker">A good time to shop</span>
+          <h2 id="deals-heading">Today's deals</h2>
+        </div>
+        <a routerLink="/offers">View all offers <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="deals-row">
+        @for (product of discountedProducts().slice(0, 4); track product.id) {
+          <a class="deal-tile" [routerLink]="['/product', product.id]">
+            <div class="deal-image">
+              @if (product.image_url) {
+                <img [src]="product.image_url" [alt]="product.name">
               } @else {
-                <strong>{{ product.regular_price | number:'1.2-2' }} ₸</strong>
+                <span aria-hidden="true">{{ product.name.charAt(0).toUpperCase() }}</span>
               }
+              <span class="deal-badge">−{{ product.discount_percent }}%</span>
             </div>
-          </div>
-        </a>
-      }
+            <div class="deal-copy">
+              <strong>{{ product.name }}</strong>
+              <span>{{ product.discounted_price | number:'1.2-2' }} ₸</span>
+            </div>
+          </a>
+        }
+      </div>
     </section>
   }
+
+  <section id="catalog-products" class="catalog-section" aria-labelledby="catalog-heading">
+    <div class="section-title-row catalog-title-row">
+      <div>
+        <span class="section-kicker">{{ isOffersPage ? 'Selected for you' : 'From the FoodSaver market' }}</span>
+        <h2 id="catalog-heading">{{ isOffersPage ? 'Special offers' : 'Browse products' }}</h2>
+      </div>
+      <span class="product-count">{{ filteredProducts().length }} items</span>
+    </div>
+
+    <section class="catalog-filters" aria-label="More product filters">
+      <label>
+        <span>Category</span>
+        <select
+          [ngModel]="categoryFilter()"
+          (ngModelChange)="categoryFilter.set($event)">
+          @for (category of categories(); track category) {
+            <option [value]="category">{{ category }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="discount-filter">
+        <input
+          type="checkbox"
+          [ngModel]="discountedOnly()"
+          (ngModelChange)="discountedOnly.set($event)">
+        <span>Discounted only</span>
+      </label>
+
+      <label>
+        <span>Minimum price</span>
+        <input
+          type="number"
+          min="0"
+          placeholder="0"
+          [ngModel]="minimumPrice()"
+          (ngModelChange)="minimumPrice.set($event)">
+      </label>
+
+      <label>
+        <span>Maximum price</span>
+        <input
+          type="number"
+          min="0"
+          placeholder="Any"
+          [ngModel]="maximumPrice()"
+          (ngModelChange)="maximumPrice.set($event)">
+      </label>
+
+      <label>
+        <span>Sort by</span>
+        <select
+          [ngModel]="sortOrder()"
+          (ngModelChange)="sortOrder.set($event)">
+          <option value="expiry">Expiration date</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+        </select>
+      </label>
+
+      <button class="clear-filters" type="button" (click)="clearFilters()">
+        Clear filters
+      </button>
+    </section>
+
+    @if (error()) {
+      <div class="catalog-message error" role="alert">{{ error() }}</div>
+    } @else if (loading()) {
+      <div class="catalog-message" role="status">Loading products...</div>
+    } @else if (filteredProducts().length === 0) {
+      <div class="catalog-message">
+        <strong>No products match your filters.</strong>
+        <p>Try a different category, price range, or search term.</p>
+      </div>
+    } @else {
+      <section class="product-grid" aria-label="Products">
+        @for (product of filteredProducts(); track product.id) {
+          <a
+            class="product-card"
+            [routerLink]="['/product', product.id]"
+            [attr.aria-label]="'View ' + product.name">
+            <div class="product-image">
+              @if (product.image_url) {
+                <img [src]="product.image_url" [alt]="product.name">
+              } @else {
+                <span aria-hidden="true">{{ product.name.charAt(0).toUpperCase() }}</span>
+              }
+              @if (getDiscount(product) > 0) {
+                <span class="discount-badge">−{{ getDiscount(product) }}%</span>
+              }
+            </div>
+            <div class="product-details">
+              <span class="category">{{ product.category }}</span>
+              <h3>{{ product.name }}</h3>
+              @if (product.unit_size) {
+                <p class="unit-size">{{ product.unit_size }}</p>
+              }
+              <div class="product-meta">
+                <span>{{ product.quantity }} in stock</span>
+                @if (product.expiry_date) {
+                  <span>Best before {{ product.expiry_date }}</span>
+                }
+              </div>
+              <div class="price-row">
+                @if (product.discount_percent > 0) {
+                  <strong>{{ product.discounted_price | number:'1.2-2' }} ₸</strong>
+                  <s>{{ product.regular_price | number:'1.2-2' }} ₸</s>
+                } @else {
+                  <strong>{{ product.regular_price | number:'1.2-2' }} ₸</strong>
+                }
+                <span class="view-product">View item <span aria-hidden="true">→</span></span>
+              </div>
+            </div>
+          </a>
+        }
+      </section>
+    }
+  </section>
+
+  <footer class="market-footer">
+    <span class="footer-mark">FS</span>
+    <p>FoodSaver helps you find food worth saving.</p>
+    <a routerLink="/account">Manage your account</a>
+  </footer>
 </section>

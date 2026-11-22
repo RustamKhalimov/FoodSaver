@@ -23,18 +23,23 @@
 .detail-image {
   position: relative;
   display: grid;
-  min-height: 390px;
+  height: 420px;
+  min-height: 420px;
   place-items: center;
   background: #f3f7f0;
   color: #68866b;
   font-size: 80px;
+  padding: 18px;
 }
 
 .detail-image img {
+  display: block;
   width: 100%;
   height: 100%;
-  min-height: 390px;
-  object-fit: cover;
+  min-height: 0;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 .discount-label {
@@ -172,10 +177,106 @@
 
   .detail-image,
   .detail-image img {
-    min-height: 250px;
+    min-height: 260px;
+  }
+
+  .detail-image {
+    height: 260px;
   }
 
   .detail-info {
     padding: 22px;
+  }
+}
+
+.detail-page {
+  max-width: 1160px;
+  padding: 42px 40px 54px;
+}
+
+.detail-card {
+  background: var(--surface, #fffefa);
+  border-color: var(--line, #e3e4db);
+  border-radius: var(--radius-lg, 16px);
+}
+
+.detail-image {
+  background: #eeefe7;
+  color: var(--muted-soft, #879187);
+}
+
+.detail-info h1 {
+  color: var(--ink, #23362b);
+  font-size: clamp(27px, 3vw, 36px);
+  letter-spacing: -0.7px;
+}
+
+.category {
+  color: var(--green, #315f43);
+}
+
+.detail-price strong {
+  color: var(--green-strong, #244d34);
+}
+
+.product-facts div {
+  border-bottom-color: var(--line, #e3e4db);
+}
+
+.product-facts dt {
+  color: var(--muted, #69776d);
+}
+
+.product-facts dd {
+  color: var(--ink, #23362b);
+}
+
+.cart-action input {
+  min-height: 46px;
+  border-color: var(--line, #e3e4db);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.cart-action button {
+  min-height: 46px;
+  background: var(--green, #315f43);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.cart-action button:not(:disabled):hover {
+  background: var(--green-strong, #244d34);
+}
+
+.back-link,
+.success {
+  color: var(--green, #315f43);
+}
+
+.discount-label {
+  background: var(--red, #953e37);
+  border-radius: 4px;
+}
+
+@media (max-width: 760px) {
+  .detail-page {
+    padding: 30px 24px 96px;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-page {
+    padding: 24px 16px 96px;
+  }
+
+  .detail-info {
+    padding: 18px;
+  }
+
+  .cart-action {
+    flex-wrap: wrap;
+  }
+
+  .cart-action button {
+    flex-basis: 100%;
   }
 }

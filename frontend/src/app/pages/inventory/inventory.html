@@ -81,7 +81,14 @@
     <div class="product-list">
 
       @for (product of filteredProducts(); track product.id) {
-        <article class="product-card">
+        <article
+          class="product-card"
+          [class.expired-product]="getExpirationStatus(product) === 'expired'"
+          [class.urgent-product]="getExpirationStatus(product) === 'urgent'"
+          [class.expiring-product]="getExpirationStatus(product) === 'expiring-soon'"
+          [class.fresh-product]="getExpirationStatus(product) === 'fresh'"
+          [class.no-expiry-product]="getExpirationStatus(product) === 'no-expiry'"
+        >
 
           <div class="product-image">
             @if (product.image_url) {
@@ -101,7 +108,11 @@
 
             <span
               class="status"
-              [class.urgent]="getDiscount(product) > 0"
+              [class.fresh]="getExpirationStatus(product) === 'fresh'"
+              [class.expiring-soon]="getExpirationStatus(product) === 'expiring-soon'"
+              [class.urgent]="getExpirationStatus(product) === 'urgent'"
+              [class.expired]="getExpirationStatus(product) === 'expired'"
+              [class.no-expiry]="getExpirationStatus(product) === 'no-expiry'"
             >
               {{ getStatus(product) }}
             </span>

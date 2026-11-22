@@ -86,14 +86,12 @@ export const routes: Routes = [
   },
   {
     path: 'discover',
-    canActivate: [requireAuth],
     loadComponent: () =>
       import('./pages/discover/discover')
         .then(m => m.Discover)
   },
   {
     path: 'offers',
-    canActivate: [requireAuth],
     loadComponent: () =>
       import('./pages/discover/discover')
         .then(m => m.Discover)
