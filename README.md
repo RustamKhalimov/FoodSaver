@@ -1,58 +1,50 @@
 # FoodSaver
 
-FoodSaver is a web application designed to help stores manage product
-inventory, monitor expiration dates, and reduce food waste.
+FoodSaver is a university project designed to help stores manage food inventory, monitor expiration dates, and reduce food waste.
 
-The application helps store employees track products, identify items
-approaching their expiration dates, and take timely actions to minimize
-unnecessary food waste.
+Store administrators manage products, quantities, expiry dates, and discounts. Customers browse available products, place orders, and view their order history.
 
 ## Project Goals
 
--   Reduce food waste through better expiration date monitoring.
--   Simplify product inventory management.
--   Help employees identify products approaching expiration.
--   Support timely actions, such as applying discounts before products
-    expire.
--   Encourage responsible consumption and production.
+- Reduce food waste through better expiration date monitoring.
+- Simplify product inventory management.
+- Help employees identify products approaching expiration.
+- Support timely actions, such as applying discounts before products expire.
+- Encourage responsible consumption and production.
 
 ## Main Features
 
--   **Inventory Management:** Manage and monitor store products.
--   **Expiration Date Tracking:** Track product expiration dates.
--   **Expiration Alerts:** Identify products approaching their
-    expiration dates.
--   **Product Management:** Store and manage product information.
--   **Discount Management:** Support discounts for products nearing
-    expiration.
+- Admin and customer accounts with token authentication and role-based access.
+- Product inventory with categories, barcodes, prices, quantities, images, and expiry dates.
+- Fresh, expiring soon, urgent, and expired inventory statuses.
+- Admin-configurable discounts for products expiring in two days, one day, or today.
+- Customer catalog, shopping cart, checkout, and order history.
+- Server-side order price calculation, expiry validation, and stock reduction.
 
-> **Note:** The listed features describe the project's functionality and
-> goals. Their implementation status should be verified against the
-> current application version.
+Reminder time and enabled/disabled preferences are saved per account. The backend includes a daily expiry-reminder email command. Configure SMTP and a host scheduler to deliver messages automatically. See [Reminder Setup](docs/REMINDERS.md).
 
 ## Technologies Used
 
 ### Frontend
-
--   Angular
--   TypeScript
--   HTML
--   CSS
+- Angular 22
+- TypeScript
+- HTML
+- CSS
 
 ### Backend
-
--   Python
--   Django 5.2.18
--   Django REST Framework 3.18.3
--   django-cors-headers 4.9.0
+- Python 3
+- Django 5.2
+- Django REST Framework
 
 ### Database
+- SQLite for local development.
 
--   SQLite
+### Communication
+- JSON REST API with DRF token authentication.
 
 ## Project Structure
 
-``` text
+```text
 FoodSaver/
 ├── backend/
 │   ├── accounts/
@@ -65,119 +57,123 @@ FoodSaver/
 │   ├── public/
 │   ├── package.json
 │   └── README.md
+├── docs/
 └── README.md
 ```
 
 ## Getting Started
 
-Follow these instructions to run FoodSaver locally.
+### Requirements
 
-### Prerequisites
+- Python 3.10 or newer.
+- Node.js compatible with the Angular version in `frontend/package-lock.json`.
+- npm.
+- Git.
 
-Make sure you have installed:
+### Clone the Repository
 
--   Python
--   Node.js
--   npm
--   Git
-
-### 1. Clone the Repository
-
-``` bash
+```bash
 git clone https://github.com/RustamKhalimov/ITPM.git
 cd ITPM
 ```
 
-### 2. Set Up the Backend
+### Backend Setup (Windows PowerShell)
 
-Open a terminal and navigate to the backend directory:
+Open a terminal in the project directory:
 
-``` bash
+```powershell
 cd backend
-```
-
-Create a Python virtual environment.
-
-**Windows:**
-
-``` powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-**macOS / Linux:**
-
-``` bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-Install backend dependencies:
-
-``` bash
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-```
-
-Apply database migrations:
-
-``` bash
 python manage.py migrate
-```
-
-Start the Django development server:
-
-``` bash
 python manage.py runserver
 ```
 
-The backend will normally be available at:
+The backend normally runs at `http://127.0.0.1:8000/`.
 
-http://127.0.0.1:8000/
+Create an administrator account when needed:
 
-### 3. Set Up the Frontend
+```powershell
+python manage.py createsuperuser
+```
 
-Open a second terminal and navigate to the frontend directory:
+Django superusers are treated as FoodSaver admins.
 
-``` bash
+### Frontend Setup
+
+Open a second terminal in the project directory:
+
+```powershell
 cd frontend
+npm ci
+npm start
 ```
 
-Install frontend dependencies:
+Open the application at `http://localhost:4200/`.
 
-``` bash
-npm install
-```
+The development frontend uses `http://127.0.0.1:8000/api` as its API endpoint. Production builds use `/api` and expect the hosting server to proxy that path to Django.
 
-Start the Angular development server:
-
-``` bash
-npx ng serve
-```
-
-Open the application in your browser:
-
-http://localhost:4200/
+See [Installation Guide](docs/INSTALLATION.md) for environment settings and troubleshooting.
 
 ## Development
 
 FoodSaver consists of two main parts:
 
--   **Frontend:** Provides the user interface and user interaction.
--   **Backend:** Handles application logic, data processing, and
-    communication with the database.
+- **Frontend:** Provides the user interface and user interaction.
+- **Backend:** Handles application logic, data processing, account permissions, and database communication.
 
-The frontend and backend work together to provide inventory management
-functionality.
+The Angular single-page application communicates with the Django REST API.
 
 ## Sustainable Development Goal
 
-FoodSaver supports United Nations Sustainable Development Goal 12:
-**Responsible Consumption and Production**.
+FoodSaver supports United Nations Sustainable Development Goal 12: **Responsible Consumption and Production**.
 
-The project aims to contribute to reducing avoidable food waste by
-helping stores monitor expiration dates and manage products more
-effectively.
+The project aims to contribute to reducing avoidable food waste by helping stores monitor expiration dates and manage products more effectively.
 
-Learn more about SDG 12:
+Learn more: [United Nations SDG 12](https://sdgs.un.org/goals/goal12).
 
-https://sdgs.un.org/goals/goal12
+## Tests and Build
+
+Run backend commands from the `backend` directory:
+
+```powershell
+python manage.py check
+python manage.py makemigrations --check
+python manage.py test
+```
+
+Run frontend commands from the `frontend` directory:
+
+```powershell
+npm test -- --watch=false
+npm run build
+```
+
+See [Testing Report](docs/TESTING.md) for recorded results. API routes and authentication are documented in [API Documentation](docs/API.md).
+
+See [Project Status](docs/PROJECT_STATUS.md) for current Sprint 3 status and remaining review work.
+
+## Database Backup
+
+Run from `backend` while the application is available:
+
+```powershell
+python scripts/sqlite_backup.py backup
+```
+
+Backups are written under `backend/backups/`, excluded from Git, and integrity-checked.
+
+To restore a backup, stop the Django server and run:
+
+```powershell
+python scripts/sqlite_backup.py restore --source backups/foodsaver-YYYYMMDD-HHMMSS.sqlite3
+```
+
+If a database already exists, the script preserves a verified copy beside it before replacing it. Read [Backup and Restore Guide](docs/BACKUP_RESTORE.md) before restoring a real database.
+
+## Project Status
+
+FoodSaver is an academic project under active development. Automated checks cover core account, inventory, pricing, and order behavior. Browser-based end-to-end workflows and deployed production configuration still require verification.
+
+Do not commit the database, backups, secrets, or user data.
