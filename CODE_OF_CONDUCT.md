@@ -31,9 +31,20 @@ These rules apply to FoodSaver's GitHub repository, issues, pull requests, code 
 
 ## Reporting Problems
 
-If you experience or notice a Code of Conduct issue, contact a FoodSaver project maintainer privately using a team-approved communication channel. Do not publish private reports or sensitive information in a public issue.
+You can report a Code of Conduct concern by creating an issue in the FoodSaver GitHub repository:
 
-Maintainers will review reports, keep details limited to the people who need to know, and decide on appropriate actions. These may include a warning, removal of inappropriate content, or limiting participation.
+https://github.com/RustamKhalimov/FoodSaver/issues
+
+When creating a report:
+
+- Provide a clear, factual description of the behavior or incident.
+- Include relevant links or context when appropriate.
+- Do not include passwords, personal addresses, private messages, or other sensitive personal information.
+- Remember that GitHub Issues may be publicly visible.
+
+If a report involves sensitive personal information, do not publish those details in a public issue. Create an issue with only a brief note that a confidential follow-up is needed. A project maintainer can then coordinate the next steps with you through GitHub. Do not assume that a public issue is a private reporting channel.
+
+Maintainers will review reports, limit discussion of sensitive details, and decide on appropriate actions. These may include a warning, removal of inappropriate content, or limiting participation.
 
 ## Our Shared Goal
 
