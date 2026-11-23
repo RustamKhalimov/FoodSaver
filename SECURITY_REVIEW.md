@@ -1,7 +1,7 @@
 # FoodSaver Security Review — Criterion 7
 
-**Review date:** 2026-11-23  
-**Source baseline:** `3c2673e`  
+**Review date:** 2026-11-23
+**Source baseline:** `3c2673e`
 **Scope:** Django configuration, authentication, profile and order access, product permissions, browser token storage, and tracked local data.
 
 This review combines source inspection with the existing Django automated tests and deployment checks. It is not a penetration test, a browser end-to-end test, or verification of a deployed production environment.
