@@ -76,8 +76,8 @@ Make sure the following software is installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/RustamKhalimov/ITPM.git
-cd ITPM
+git clone https://github.com/RustamKhalimov/FoodSaver.git
+cd FoodSaver
 ```
 
 ### 2. Backend Setup
@@ -194,4 +194,12 @@ https://sdgs.un.org/goals/goal12
 
 ## Contributing
 
-Contributions and suggestions for improving FoodSaver are welcome. Further contribution guidelines will be documented as the project develops.
+Contributions and suggestions for improving FoodSaver are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+## Community
+
+We welcome bug reports, documentation fixes, testing feedback, and code contributions. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup and pull request guidelines, and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for our community standards.
+
+## Privacy and Security
+
+FoodSaver uses Django authentication and role-based API permissions. The project stores account, inventory, notification preference, and order information needed for its core features. See [PRIVACY.md](PRIVACY.md) for a technical data overview. Before deploying the application, review the recommendations in [SECURITY_REVIEW.md](SECURITY_REVIEW.md).
