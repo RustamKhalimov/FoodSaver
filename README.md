@@ -47,6 +47,7 @@ FoodSaver/
 │   ├── accounts/
 │   ├── products/
 │   ├── config/
+│   ├── scripts/
 │   ├── manage.py
 │   └── requirements.txt
 │
@@ -57,12 +58,27 @@ FoodSaver/
 │   ├── package-lock.json
 │   └── README.md
 │
+├── docs/
+│   ├── ACCEPTANCE.md
+│   ├── API.md
+│   ├── BACKUP_RESTORE.md
+│   ├── INSTALLATION.md
+│   ├── PROJECT_STATUS.md
+│   ├── REMINDERS.md
+│   └── TESTING.md
+│
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── INSTALLATION.md
+├── LICENSE
+├── PRIVACY.md
+├── SECURITY_REVIEW.md
 └── README.md
 ```
 
 ## Installation and Setup
 
-Follow the instructions below to run FoodSaver locally.
+Follow the instructions in [INSTALLATION.md](INSTALLATION.md) to install and run FoodSaver locally.
 
 ### Prerequisites
 
@@ -73,96 +89,23 @@ Make sure the following software is installed:
 - npm
 - Git
 
-### 1. Clone the Repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/RustamKhalimov/FoodSaver.git
 cd FoodSaver
 ```
 
-### 2. Backend Setup
+### Running the Application
 
-Navigate to the backend directory:
+FoodSaver consists of two main components:
 
-```bash
-cd backend
-```
+- **Backend:** Django REST API running at `http://127.0.0.1:8000/`
+- **Frontend:** Angular application running at `http://localhost:4200/`
 
-Create a Python virtual environment.
+Both development servers must be running to use the complete application.
 
-**Windows:**
-
-```powershell
-python -m venv .venv
-```
-
-Activate the environment:
-
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-**macOS / Linux:**
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-Install the required Python packages:
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-Apply database migrations:
-
-```bash
-python manage.py migrate
-```
-
-Start the Django development server:
-
-```bash
-python manage.py runserver
-```
-
-By default, the backend development server is available at:
-
-`http://127.0.0.1:8000/`
-
-### 3. Frontend Setup
-
-Open a separate terminal and navigate to the frontend directory:
-
-```bash
-cd frontend
-```
-
-Install frontend dependencies:
-
-```bash
-npm install
-```
-
-Start the Angular development server:
-
-```bash
-npx ng serve
-```
-
-Open the application in your browser:
-
-`http://localhost:4200/`
-
-## Running the Application
-
-To use FoodSaver locally, both development servers should be running:
-
-- **Django Backend:** `http://127.0.0.1:8000/`
-- **Angular Frontend:** `http://localhost:4200/`
-
-The frontend communicates with the backend to access application functionality and data.
+For detailed installation instructions, including virtual environment setup, dependency installation, and database migrations, see [INSTALLATION.md](INSTALLATION.md).
 
 ## Project Ownership
 
@@ -170,7 +113,14 @@ FoodSaver is a team-developed project. The development team is responsible for m
 
 ## Team Members
 
-FoodSaver is developed collaboratively by a team of four members.
+FoodSaver is developed collaboratively by a team of four members:
+
+| Member | Name |
+|---|---|
+| Member 1 | Әзи Айгерім |
+| Member 2 | Халимов Рустам |
+| Member 3 | Баймырза Нурлыбек |
+| Member 4 | Калиев Алпамыс |
 
 ## License
 
@@ -194,12 +144,28 @@ https://sdgs.un.org/goals/goal12
 
 ## Contributing
 
-Contributions and suggestions for improving FoodSaver are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+Contributions and suggestions for improving FoodSaver are welcome.
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, development setup, and pull request instructions.
 
 ## Community
 
-We welcome bug reports, documentation fixes, testing feedback, and code contributions. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup and pull request guidelines, and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for our community standards.
+We welcome bug reports, documentation improvements, testing feedback, and code contributions.
+
+All contributors are expected to follow the standards described in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Privacy and Security
 
-FoodSaver uses Django authentication and role-based API permissions. The project stores account, inventory, notification preference, and order information needed for its core features. See [PRIVACY.md](PRIVACY.md) for a technical data overview. Before deploying the application, review the recommendations in [SECURITY_REVIEW.md](SECURITY_REVIEW.md).
+FoodSaver uses Django authentication and role-based API permissions.
+
+The project stores account information, inventory data, notification preferences, and order information required for its core functionality.
+
+For more information, see:
+
+- [PRIVACY.md](PRIVACY.md) — technical overview of collected and stored data.
+- [SECURITY_REVIEW.md](SECURITY_REVIEW.md) — security review, identified risks, and recommendations.
+- [docs/API.md](docs/API.md) — API documentation.
+- [docs/TESTING.md](docs/TESTING.md) — testing documentation.
+- [docs/BACKUP_RESTORE.md](docs/BACKUP_RESTORE.md) — database backup and restoration instructions.
+
+**Note:** FoodSaver is an ongoing project. The security review documents known limitations and recommendations that should be addressed before production deployment.
